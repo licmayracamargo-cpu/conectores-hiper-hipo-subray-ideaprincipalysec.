@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lenguaje y Comunicación – 3.º de primaria</title>
+<style>
+:root{--o:#FF8C42;--o2:#FFA726;--o3:#FFF3E0;--g:#4CAF50;--g2:#81C784;--g3:#E8F5E9;--ink:#3b2f1e}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Nunito","Arial Rounded MT Bold","Trebuchet MS",sans-serif;background:linear-gradient(160deg,var(--o3),var(--g3));min-height:100vh;color:var(--ink);font-size:19px}
+#app{max-width:940px;margin:0 auto;padding:14px}
+h1{text-align:center;font-size:2.1rem;margin:6px 0;color:#d9640f}
+h3{margin:10px 0}
+.sub0{text-align:center;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{border:0;border-radius:26px;padding:16px;font:inherit;color:inherit;cursor:pointer;display:flex;flex-direction:column;gap:4px;align-items:center;box-shadow:0 6px 0 #0002;transition:transform .2s}
+.card:nth-child(odd){background:var(--o2)}.card:nth-child(even){background:var(--g2)}
+.card:hover{transform:translateY(-4px) rotate(-1deg)}
+.card .ic{font-size:2.8rem}.card b{font-size:1.3rem}.card small{font-size:.95rem}
+.btn{font:inherit;font-weight:800;border:0;border-radius:18px;padding:10px 18px;background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 4px 0 #0002;margin:6px;font-size:1.05rem;transition:transform .15s}
+.btn:hover{transform:scale(1.04)}
+.btn.go{background:var(--g);color:#fff;font-size:1.2rem;padding:12px 26px}
+.bar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#fff;border-radius:20px;padding:6px 12px;font-weight:800}
+.box{background:#fff;border-radius:28px;padding:18px;box-shadow:0 6px 0 #0002;margin-top:12px}
+.txt{background:var(--o3);border-radius:18px;padding:14px;line-height:2;font-size:1.15rem}
+.ops{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0}
+.opt{flex:1 1 230px;font:inherit;font-weight:700;font-size:1.05rem;text-align:left;border:3px solid var(--g2);background:var(--g3);border-radius:18px;padding:12px 16px;cursor:pointer;color:var(--ink)}
+.opt:hover{background:#d4efd6}
+.opt.rt{background:#b7e4b9;border-color:var(--g)}
+.opt:disabled{opacity:.6;cursor:default}.opt.rt:disabled{opacity:1}
+.bad{animation:sh .4s}
+@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.fb{margin-top:12px;border-radius:18px;padding:10px;font-size:1.08rem}
+.fb.ok{background:var(--g3);border:2px solid var(--g2)}.fb.bad{background:var(--o3);border:2px solid var(--o2)}
+.sn,.tk{cursor:pointer;border-radius:6px;padding:2px 3px}
+.tk{display:inline-block;background:#fff;border:2px solid var(--o3);padding:2px 8px;margin:2px}
+.sn.on{background:linear-gradient(transparent 35%,#ffb74d 35%)}
+.tk.on{background:#ffcc80;border-color:var(--o)}
+.tk.rt{background:#b7e4b9;border-color:var(--g)}
+.slot{background:#ffe0b2;border-radius:10px;padding:0 14px;border:3px dashed var(--o)}
+.cats{display:flex;gap:12px;flex-wrap:wrap}
+.cat{flex:1 1 250px;background:var(--o3);border:3px dashed var(--o2);border-radius:20px;padding:10px;text-align:center;min-height:120px;cursor:pointer}
+.drop{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+.bank{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:14px 0}
+.wc{font-weight:800;font-size:1.15rem;background:var(--o2);color:#fff;border-radius:16px;padding:10px 18px;cursor:grab;touch-action:none;user-select:none;box-shadow:0 4px 0 #c77700}
+.wc.sel{outline:4px solid var(--g)}.wc.ok{background:var(--g);box-shadow:0 4px 0 #2e7d32;cursor:default}
+.fly{position:fixed;pointer-events:none;z-index:99;transform:rotate(-5deg)}
+.rec{background:var(--o3);border-radius:18px;padding:8px;margin:10px 0;font-weight:800;text-align:center}
+.stars{font-size:3rem;text-align:center}
+.conf{position:fixed;top:-30px;font-size:2rem;animation:fall 1.6s linear forwards;z-index:98;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body><div id="app"></div>
+<script>
+/* ============ BANCOS DE EJERCICIOS (20 por juego) ============ */
+// Juego 1: 3 oraciones por texto. La 1.ª es la IDEA PRINCIPAL; las otras 2 son ideas secundarias.
+const R1=`Las abejas son muy importantes para la naturaleza.|Al volar de flor en flor llevan el polen.|Gracias a ellas crecen frutas y flores.
+Los perros son excelentes compañeros del ser humano.|Cuidan la casa y avisan cuando llega alguien.|También juegan con los niños y los hacen felices.
+Es importante lavarse las manos todos los días.|Así eliminamos los microbios que nos enferman.|Debemos hacerlo antes de comer y después de ir al baño.
+Las plantas necesitan luz, agua y aire para vivir.|El sol les da la energía para crecer.|Sus raíces toman el agua de la tierra.
+La amistad es un valor muy bonito.|Un buen amigo te escucha cuando estás triste.|También comparte sus juguetes y juega contigo.
+El camello puede vivir en el desierto.|Guarda grasa en su joroba para tener energía.|Puede pasar varios días sin tomar agua.
+Reciclar ayuda a cuidar nuestro planeta.|Separamos el papel, el vidrio y el plástico.|Así se reduce la basura y se reutilizan materiales.
+La luna cambia de forma durante el mes.|A veces se ve redonda y brillante.|Otras veces solo se ve una pequeña curva.
+Mi abuela es la mejor cocinera de la familia.|Prepara sopas, pasteles y platos deliciosos.|Todos pedimos más cuando visitamos su casa.
+Los murciélagos son animales de la noche.|Duermen colgados de cabeza durante el día.|Salen a buscar insectos cuando oscurece.
+Dormir bien es bueno para la salud.|Cuando dormimos, el cuerpo descansa y crece.|Por eso los niños deben dormir muchas horas.
+Los delfines son animales muy inteligentes.|Pueden aprender trucos con facilidad.|Se comunican entre ellos con silbidos y sonidos.
+El arcoíris aparece cuando hay sol y lluvia a la vez.|La luz del sol atraviesa las gotas de agua.|Así se forman siete colores en el cielo.
+Ser puntual es una muestra de respeto.|Llegar a tiempo permite que todos comiencen juntos.|Quien llega tarde hace esperar a los demás.
+Las hormigas trabajan en equipo.|Algunas buscan comida y otras cuidan a las crías.|Juntas llevan hojas muy grandes al hormiguero.
+Los volcanes son montañas con fuego en su interior.|Cuando hacen erupción lanzan lava y ceniza.|La lava caliente baja por sus laderas.
+Practicar deporte es bueno para el cuerpo.|Nos hace fuertes y llenos de energía.|Además nos ayuda a hacer nuevos amigos.
+La mariposa cambia mucho durante su vida.|Primero es un huevo y luego una oruga.|Después se encierra en un capullo y sale con alas.
+Decir la verdad es un valor importante.|Las personas confían en quienes no mienten.|Mentir puede hacer que perdamos amigos.
+El agua es muy necesaria para la vida.|Las personas y los animales la beben para vivir.|Las plantas también la necesitan para crecer.`;
+// Juego 2: Hiperónimo:hipónimo1,hipónimo2,hipónimo3,hipónimo4
+const R2=`Frutas:manzana,plátano,uva,pera
+Verduras:zanahoria,lechuga,papa,cebolla
+Mascotas:perro,gato,conejo,hámster
+Aves:loro,águila,pingüino,gallina
+Instrumentos musicales:guitarra,flauta,tambor,piano
+Medios de transporte:bus,avión,barco,bicicleta
+Colores:rojo,azul,verde,amarillo
+Prendas de vestir:camisa,pantalón,chompa,falda
+Muebles:mesa,silla,cama,sofá
+Útiles escolares:lápiz,cuaderno,regla,borrador
+Deportes:fútbol,natación,básquet,voleibol
+Insectos:mariposa,hormiga,abeja,mosca
+Flores:rosa,margarita,clavel,girasol
+Herramientas:martillo,serrucho,destornillador,alicate
+Planetas:Marte,Venus,Júpiter,Saturno
+Partes del cuerpo:mano,pie,ojo,oreja
+Profesiones:doctor,maestro,bombero,panadero
+Figuras geométricas:círculo,cuadrado,triángulo,rectángulo
+Postres:helado,pastel,flan,gelatina
+Peces:trucha,sardina,atún,tiburón`;
+// Juego 3: 4 oraciones ~ posiciones (0-3) de las 2 oraciones clave
+const R3=`Los pingüinos viven en lugares muy fríos.|Tienen plumas gruesas que los protegen del frío.|Yo vi uno en una película.|Mi hermano quiere uno de mascota.~0,1
+Ayer llovió después del almuerzo.|La lluvia llena los ríos y riega las plantas.|A mi hermano le gusta saltar en los charcos.|Sin lluvia, la Tierra se quedaría sin agua dulce.~1,3
+Los pulpos son animales marinos muy listos.|Una vez vi uno en un acuario.|Mi tío dice que le dan miedo.|Pueden cambiar de color para esconderse.~0,3
+Hoy mi mamá usó sombrero.|El sol es una estrella gigante.|Nos da luz y calor todos los días.|Ayer comimos helado en el patio.~1,2
+Yo quiero ver una tortuga marina algún día.|Mi vecina tiene una de juguete.|Las tortugas marinas ponen sus huevos en la arena.|Al nacer, las crías caminan hasta el mar.~2,3
+Una buena alimentación nos mantiene sanos.|A mí me gusta el jugo de naranja.|Debemos comer frutas, verduras y cereales.|Mi papá cocina los domingos.~0,2
+Mi amigo tiene una camiseta con un elefante.|El elefante es el animal terrestre más grande.|El zoológico está cerca de mi casa.|Usa su trompa para beber agua y tomar comida.~1,3
+Los árboles nos dan oxígeno para respirar.|Sus hojas dan sombra en los días de calor.|En mi calle hay un árbol muy viejo.|Mi perro duerme debajo de él.~0,1
+Mi maestra nos mostró un globo terráqueo.|Ese día había mucho ruido en el aula.|La Tierra gira alrededor del Sol.|Una vuelta completa tarda un año.~2,3
+Los gatos son animales muy limpios.|Mi gato se llama Pelusa.|Pasan muchas horas lamiendo su pelo para asearse.|A veces duerme en mi cama.~0,2
+Fui al lago Titicaca en vacaciones.|El lago Titicaca está entre Bolivia y Perú.|Compré un recuerdo de lana.|Es el lago navegable más alto del mundo.~1,3
+Hoy almorcé sopa de papa.|La papa es un alimento que viene de los Andes.|Mi abuelita la cocina con ají.|Existen cientos de variedades de papa.~1,3
+Las abejas fabrican miel en sus panales.|Un día me picó una en el brazo.|Mi mamá puso hielo en mi brazo.|Para hacerla, recogen néctar de las flores.~0,3
+Reciclar ayuda a cuidar el planeta.|Mi escuela tiene tachos de colores.|Al reciclar, se reduce la basura.|Mi amiga Sofía me regaló una botella.~0,2
+Los murciélagos duermen colgados de cabeza.|Salen de noche a buscar insectos.|Yo vi uno en una cueva de cuento.|A mi prima le dan escalofríos.~0,1
+Mi abuelo me contó un cuento de hormigas.|Las hormigas trabajan juntas en equipo.|Era un cuento muy largo.|Algunas buscan comida y otras cuidan a las crías.~1,3
+Los volcanes son montañas con fuego adentro.|Cuando hacen erupción lanzan lava y ceniza.|Yo hice un volcán de plastilina.|Mi maestro nos felicitó.~0,1
+El deporte hace fuertes nuestros músculos.|Yo juego básquet los sábados.|Mi entrenador se llama Carlos.|También nos ayuda a hacer amigos.~0,3
+Decir la verdad es un valor importante.|Quien miente pierde la confianza de los demás.|Hoy dibujé un corazón.|A mi hermana le gusta cantar.~0,1
+Mi botella de agua es azul.|El agua es necesaria para la vida.|Siempre la llevo a la escuela.|Personas, animales y plantas necesitan agua para vivir.~1,3`;
+// Juego 4: líneas con "|" = completar (texto|correcto|distractor1|distractor2); líneas con [ ] = identificar
+const R4=`Mateo come pan ___ toma leche.|y|pero|porque
+Lucía llevó paraguas ___ estaba lloviendo.|porque|pero|luego
+Quería jugar fútbol, ___ no tenía pelota.|pero|porque|entonces
+Mi hermana canta muy bien y ___ toca la guitarra.|también|porque|pero
+Se hizo de noche, ___ encendimos la linterna.|entonces|pero|porque
+Primero lavo mis manos, ___ me siento a comer.|luego|pero|porque
+Primero hicimos la tarea, luego jugamos y ___ ayudamos a mamá.|por último|pero|porque
+La pizza es rica; ___ es barata.|además|pero|porque
+Tomás estudió mucho, ___ sacó buena nota.|entonces|pero|porque
+Ana tiene un perro ___ un gato.|y|porque|luego
+Compré manzanas [y] peras en el mercado.
+Quise salir a jugar, [pero] estaba lloviendo.
+Llegué tarde [porque] perdí el bus.
+Mi tía hornea pasteles, [además] vende pan.
+Me levanto temprano, [luego] me baño [y] desayuno.
+Mi primo [también] juega básquet.
+Estaba muy cansado, [entonces] se fue a dormir.
+Primero pinté el dibujo, [luego] lo recorté [y] [por último] lo pegué.
+Quería un helado, [pero] no tenía dinero; [entonces] volví a casa.
+Pedro es amable [porque] ayuda a todos, [además] comparte sus juguetes.`;
+const CE={"y":"suma ideas","porque":"explica la razón","pero":"muestra una contradicción","también":"agrega algo más","entonces":"muestra la consecuencia","luego":"marca el orden (después)","por último":"marca lo que pasa al final","además":"suma otra idea importante"};
+const D1=R1.split("\n").map(l=>l.split("|"));
+const D2=R2.split("\n").map(l=>{const[c,w]=l.split(":");return[c,w.split(",")]});
+const D3=R3.split("\n").map(l=>{const[a,k]=l.split("~");return{s:a.split("|"),k:k.split(",").map(Number)}});
+const D4=R4.split("\n").map(l=>{if(l.includes("|")){const p=l.split("|");return{t:p[0],c:p[1],d:[p[2],p[3]]}}return{m:l}});
+const GM=[
+{id:"g1",t:"Detective de Ideas",ic:"🔎",d:"Idea principal y secundaria",r:()=>r1()},
+{id:"g2",t:"Cazadores de Palabras",ic:"🏹",d:"Hipónimos e hiperónimos",r:()=>r2()},
+{id:"g3",t:"El Subrayador Mágico",ic:"🖍️",d:"Subraya para hacer resúmenes",r:()=>r3()},
+{id:"g4",t:"El Puente de los Conectores",ic:"🌉",d:"Palabras conectoras",r:()=>r4()}];
+/* ============ UTILIDADES ============ */
+const $=id=>document.getElementById(id),app=$("app");
+const sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const OKS=["🌟 ¡Genial!","🎉 ¡Excelente trabajo!","💪 ¡Qué bien lo haces!","🚀 ¡Sigue así, campeón!","👏 ¡Muy bien!"];
+const rnd=()=>OKS[Math.random()*OKS.length|0];
+const mem={};
+const store={get(){try{const r=localStorage.getItem("lc3");if(r)return JSON.parse(r)}catch(e){}return mem.d||{used:{},best:{}}},
+set(d){mem.d=d;try{localStorage.setItem("lc3",JSON.stringify(d))}catch(e){}}};
+const fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+let ac;function snd(ok){try{ac=ac||new(window.AudioContext||webkitAudioContext)();(ok?[[523,0],[659,.1],[784,.2]]:[[220,0],[180,.12]]).forEach(([f,d])=>{const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+d;o.type=ok?"sine":"triangle";o.frequency.value=f;o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(.15,t);g.gain.exponentialRampToValueAtTime(.001,t+.18);o.start(t);o.stop(t+.2)})}catch(e){}}
+function burst(n){for(let i=0;i<(n||10);i++){const s=document.createElement("span");s.className="conf";s.textContent=["⭐","🎉","✨","🌟"][i%4];s.style.left=Math.random()*95+"%";s.style.animationDelay=Math.random()*.4+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),2200)}}
+// Voz (Web Speech API) en español
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="es-MX";u.rate=.9;const v=speechSynthesis.getVoices().find(x=>/^es/i.test(x.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+function sayCur(){say(S.txt)}
+const VOZ=`<button class=btn onclick="sayCur()">🔊 Escuchar lectura / instrucción</button>`;
+/* ============ MENÚ ============ */
+let S={},tid,askReset=0;
+function menu(){clearInterval(tid);try{speechSynthesis.cancel()}catch(e){}askReset=0;const d=store.get();
+app.innerHTML=`<h1>📚 Lenguaje y Comunicación</h1><p class=sub0>3.º de primaria · ¡Elige un juego y supera tu récord!</p><div class=grid>`+GM.map((g,i)=>{const b=d.best[g.id]||{s:0,t:0};return `<button class=card onclick="ini(${i})"><span class=ic>${g.ic}</span><b>${g.t}</b><small>${g.d}</small><span>🏆 Mejor puntaje: <b>${b.s}</b></span><span>⏱️ Mejor tiempo: <b>${b.t?fmt(b.t):"—"}</b></span><span>📖 ${(d.used[g.id]||[]).length}/20 ejercicios jugados</span></button>`}).join("")+`</div><p style="text-align:center"><button class=btn id=rs onclick="resetAll()">Borrar récords e historial</button></p>`}
+function resetAll(){if(!askReset){askReset=1;$("rs").textContent="¿Seguro? Toca otra vez para borrar todo";return}store.set({used:{},best:{}});menu()}
+/* ============ PARTIDA ============ */
+function ini(i){const g=GM[i],u=store.get().used[g.id]||[],left=[...Array(20).keys()].filter(x=>!u.includes(x));
+if(!left.length)return cycle(i);
+clearInterval(tid);S={g,i,idx:sh(left).slice(0,5),n:0,sc:0,ok:0,sec:0,perf:1};
+tid=setInterval(()=>{S.sec++;const e=$("tm");if(e)e.textContent=fmt(S.sec)},1000);nx0()}
+function cycle(i){const g=GM[i];app.innerHTML=`<div class=box style="text-align:center"><div class=stars>🎓</div><h2>¡Felicitaciones! Completaste los 20 ejercicios de «${g.t}»</h2><p>Empezamos un nuevo ciclo con todos los ejercicios otra vez. ¡Tus récords se conservan!</p><button class="btn go" onclick="newCycle(${i})">▶️ Nuevo ciclo</button><button class=btn onclick="menu()">🏠 Menú</button></div>`}
+function newCycle(i){const d=store.get();d.used[GM[i].id]=[];store.set(d);ini(i)}
+function hdr(){return `<div class=bar><button class=btn onclick="menu()">🏠</button><span>${S.g.ic} ${S.g.t}</span><span>Ejercicio ${S.n+1}/5</span><span>⭐ ${S.sc}</span><span>⏱️ <span id=tm>${fmt(S.sec)}</span></span></div>`}
+function nx0(){if(S.n==5)return fin();S.rev=0;S.g.r()}
+function nxt(){try{speechSynthesis.cancel()}catch(e){}if(!S.rev)S.ok++;S.n++;nx0()}
+function fbk(m,c,fn,lab){const f=$("fb");f.className="fb "+c;f.innerHTML=m+(fn?`<br><button class="btn go" onclick="${fn}">${lab||(S.n==4?"Ver resultado 🏁":"Siguiente ➡️")}</button>`:"")}
+function good(p){snd(1);burst();S.sc+=p}
+// Opciones de respuesta (botones). cor = respuesta correcta; S.hint(v) = pista; S.done(rev) = mensaje final
+function opts(list,cor){S.o=list;S.cor=cor;S.t=0;S.lock=0;return `<div class=ops>`+list.map((v,k)=>`<button class=opt id=o${k} onclick="pick(${k})">${v}</button>`).join("")+`</div><div id=fb class=fb></div>`}
+function pick(k){if(S.lock)return;const v=S.o[k],b=$("o"+k);
+if(v==S.cor){S.lock=1;b.classList.add("rt");if(S.t)S.perf=0;good(S.t?S.full/2:S.full);S.done(0);return}
+S.t++;b.disabled=true;b.classList.add("bad");snd(0);
+if(S.t>1){S.lock=1;S.rev=1;S.perf=0;document.querySelectorAll(".opt").forEach((x,j)=>{x.disabled=true;if(S.o[j]==S.cor)x.classList.add("rt")});S.done(1)}
+else fbk("🤔 "+S.hint(v)+" ¡Inténtalo otra vez, tú puedes!","bad")}
+const pre=rev=>rev?"💡 La respuesta correcta es la verde. ":rnd()+" ";
+/* ============ JUEGO 1: DETECTIVE DE IDEAS ============ */
+function r1(){S.d=1+(Math.random()*2|0);S.st=1;pa1()}
+function pa1(){const e=D1[S.idx[S.n]],st=S.st;S.full=50;let o,cor,q;
+if(st==1){o=sh(e.slice());cor=e[0];q="¿Cuál es la <b>IDEA PRINCIPAL</b> del texto?";S.hint=()=>"Pista: la idea principal cuenta de qué trata TODO el texto. Las otras frases solo dan detalles."}
+else{const j=(S.idx[S.n]+1+(Math.random()*19|0))%20;o=sh([e[S.d],e[0],D1[j][1]]);cor=e[S.d];q="Ahora elige una <b>IDEA SECUNDARIA</b> (un detalle).";S.hint=v=>v==e[0]?"Esa es la idea principal. Busca un detalle que la explique.":"Esa frase es de otro tema. Una idea secundaria da un detalle de ESTE texto."}
+S.txt="Lee con atención. "+e.join(" ")+" "+q.replace(/<[^>]+>/g,"");
+const h=hdr()+`<div class=box><div class=txt>${e.join(" ")}</div>${VOZ}<h3>${q}</h3>`;
+const o2=opts(o,cor);
+S.done=rev=>st==1?fbk(pre(rev)+"Esa es la idea principal.","ok","S.st=2;pa1()","Continuar ➡️"):fbk(pre(rev)+"Los detalles ayudan a explicar la idea principal.","ok","nxt()");
+app.innerHTML=h+o2+`</div>`}
+/* ============ JUEGO 2: CAZADORES DE PALABRAS ============ */
+function r2(){const i=S.idx[S.n],[cat,w]=D2[i];S.full=100;
+if(i%2==0)return dr2(i);
+const used=[i],oth=()=>{let j;do{j=Math.random()*20|0}while(used.includes(j));used.push(j);return D2[j]};
+const x=oth(),y=oth(),hi=w.slice(0,3).map(v=>`<b>${v}</b>`).join(", ");let q,o,cor;
+if(i%4==1){cor=w[3];o=sh([cor,x[1][0],y[1][1]]);q=`${hi} y ___ pertenecen al grupo de <b>${cat}</b>. ¿Qué palabra falta?`;S.hint=v=>`«${v}» no es un tipo de ${cat.toLowerCase()}. Piensa en qué grupo está.`}
+else{cor=cat;o=sh([cat,x[0],y[0]]);q=`${hi} y <b>${w[3]}</b> pertenecen al grupo de ___. ¿Cuál es el grupo?`;S.hint=v=>`Esas palabras no forman parte del grupo «${v}». Busca el nombre del grupo grande.`}
+const h=hdr()+`<div class=box><h3>Completa la familia de palabras</h3><div class=txt>${q}</div>`;
+S.done=rev=>fbk(pre(rev)+`«${cat}» es el <b>hiperónimo</b> (el grupo grande) y ${w.join(", ")} son sus <b>hipónimos</b>.`,"ok","nxt()");
+app.innerHTML=h+opts(o,cor)+`</div>`}
+function dr2(i){const A=D2[i],B=D2[(i+10)%20];S.lock=0;S.left=4;S.mis=0;S.selk=null;S.cats=[A[0],B[0]];
+S.cards=sh([...sh(A[1]).slice(0,2).map(w=>[w,0]),...sh(B[1]).slice(0,2).map(w=>[w,1])]);
+app.innerHTML=hdr()+`<div class=box><h3>Arrastra cada palabra (hipónimo) a su grupo (hiperónimo)</h3><div class=cats>`+[A,B].map((c,k)=>`<div class=cat data-c=${k}><b>${c[0]}</b><div class=drop id=d${k}></div></div>`).join("")+`</div><div class=bank>${S.cards.map((c,k)=>`<span class=wc data-k=${k}>${c[0]}</span>`).join("")}</div><small>Arrastra con el dedo o el ratón. También puedes tocar la palabra y luego tocar el grupo.</small><div id=fb class=fb></div></div>`;
+document.querySelectorAll(".wc").forEach(c=>{c.onpointerdown=ev=>{if(c.classList.contains("ok")||S.lock)return;ev.preventDefault();
+const k=+c.dataset.k,r=c.getBoundingClientRect(),f=c.cloneNode(true),sx=ev.clientX,sy=ev.clientY;let mv=0;f.classList.add("fly");document.body.appendChild(f);
+const ps=e=>{f.style.left=e.clientX-r.width/2+"px";f.style.top=e.clientY-r.height/2+"px"};ps(ev);
+const m=e=>{if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>8)mv=1;ps(e)};
+const u=e=>{removeEventListener("pointermove",m);removeEventListener("pointerup",u);f.remove();
+if(mv){const t=document.elementFromPoint(e.clientX,e.clientY),ct=t&&t.closest(".cat");if(ct)place(k,+ct.dataset.c)}
+else{S.selk=k;document.querySelectorAll(".wc").forEach(x=>x.classList.toggle("sel",x==c))}};
+addEventListener("pointermove",m);addEventListener("pointerup",u)}});
+document.querySelectorAll(".cat").forEach(ct=>ct.onclick=()=>{if(S.selk!=null&&!S.lock)place(S.selk,+ct.dataset.c)})}
+function place(k,c){if(S.lock)return;const w=S.cards[k],el=document.querySelector(`.wc[data-k="${k}"]`);if(el.classList.contains("ok"))return;
+if(w[1]==c){el.classList.remove("sel");el.classList.add("ok");$("d"+c).appendChild(el);S.selk=null;snd(1);
+if(--S.left==0){S.lock=1;const p=S.mis==0?100:S.mis<3?50:0;if(!p)S.rev=1;if(S.mis)S.perf=0;good(p);
+fbk(rnd()+` Los grupos grandes se llaman <b>hiperónimos</b> y las palabras que contienen, <b>hipónimos</b>.`,"ok","nxt()")}
+else fbk("👍 ¡Bien! Sigue con las demás palabras.","ok")}
+else{S.mis++;snd(0);S.selk=null;el.classList.remove("sel");el.classList.add("bad");setTimeout(()=>el.classList.remove("bad"),500);
+fbk(`🤔 «${w[0]}» no es un tipo de ${S.cats[c].toLowerCase()}. ¡Prueba en el otro grupo!`,"bad")}}
+/* ============ JUEGO 3: EL SUBRAYADOR MÁGICO ============ */
+function r3(){const e=D3[S.idx[S.n]];S.sel=new Set();S.t=0;S.lock=0;
+S.txt="Lee el texto y subraya las dos oraciones más importantes. "+e.s.join(" ");
+app.innerHTML=hdr()+`<div class=box><h3>Subraya las <b>2 oraciones clave</b> para armar el resumen</h3><div class=txt>${e.s.map((s,k)=>`<span class=sn id=s${k} onclick="tg(${k})">${s}</span>`).join(" ")}</div>${VOZ}<button class="btn go" onclick="ck3()">Comprobar ✅</button><div id=fb class=fb></div></div>`}
+function tg(k){if(S.lock)return;S.sel.has(k)?S.sel.delete(k):S.sel.add(k);$("s"+k).classList.toggle("on",S.sel.has(k))}
+function ck3(){if(S.lock)return;const e=D3[S.idx[S.n]],ks=e.k,res="<br>📝 <b>Tu resumen:</b> "+ks.map(k=>e.s[k]).join(" ");
+if(S.sel.size==ks.length&&ks.every(k=>S.sel.has(k))){S.lock=1;if(S.t)S.perf=0;good(S.t?50:100);fbk(rnd()+" ¡Subrayaste las ideas clave!"+res,"ok","nxt()");return}
+S.t++;snd(0);
+if(S.t>1){S.lock=1;S.rev=1;S.perf=0;document.querySelectorAll(".sn").forEach((x,k)=>x.classList.toggle("on",ks.includes(k)));fbk("💡 Estas eran las oraciones clave: dicen lo más importante."+res,"ok","nxt()")}
+else fbk("🤔 "+(S.sel.size!=2?"Debes subrayar exactamente 2 oraciones.":"Casi. Las oraciones clave dan datos importantes. Deja fuera lo personal (yo, mi, ayer, hoy).")+" ¡Prueba otra vez!","bad")}
+/* ============ JUEGO 4: EL PUENTE DE LOS CONECTORES ============ */
+function r4(){const e=D4[S.idx[S.n]];S.full=100;
+if(e.c){const o=sh([e.c,...e.d]);S.hint=v=>`«${v}» no encaja aquí. Piensa qué relación hay entre las dos ideas.`;
+const h=hdr()+`<div class=box><h3>Elige el conector que completa la oración</h3><div class=txt>${e.t.replace("___",'<span class=slot>&nbsp;?&nbsp;</span>')}</div>`;
+S.done=rev=>fbk(pre(rev)+`«${e.t.replace("___",e.c)}» El conector «${e.c}» ${CE[e.c]}.`,"ok","nxt()");
+app.innerHTML=h+opts(o,e.c)+`</div>`;return}
+S.tk=e.m.match(/\[[^\]]+\]|[^\s\[]+/g).map(t=>({w:t.replace(/[\[\]]/g,""),c:t[0]=="["}));S.sel=new Set();S.t=0;S.lock=0;
+const n=S.tk.filter(x=>x.c).length;
+app.innerHTML=hdr()+`<div class=box><h3>Toca las palabras conectoras escondidas (hay ${n})</h3><div class=txt>${S.tk.map((x,k)=>`<span class=tk id=k${k} onclick="tg4(${k})">${x.w}</span>`).join(" ")}</div><button class="btn go" onclick="ck4()">Comprobar ✅</button><div id=fb class=fb></div></div>`}
+function tg4(k){if(S.lock)return;S.sel.has(k)?S.sel.delete(k):S.sel.add(k);$("k"+k).classList.toggle("on",S.sel.has(k))}
+function ck4(){if(S.lock)return;const ok=S.tk.every((x,k)=>x.c==S.sel.has(k)),cs=S.tk.filter(x=>x.c).map(x=>x.w);
+const ex=cs.map(c=>`«${c}» ${CE[c]}`).join("; ")+".";
+if(ok){S.lock=1;if(S.t)S.perf=0;good(S.t?50:100);fbk(rnd()+" ¡Encontraste todos los conectores! "+ex,"ok","nxt()");return}
+S.t++;snd(0);
+if(S.t>1){S.lock=1;S.rev=1;S.perf=0;S.tk.forEach((x,k)=>{const el=$("k"+k);el.classList.remove("on");if(x.c)el.classList.add("rt")});fbk("💡 Los conectores eran los verdes. "+ex,"ok","nxt()")}
+else fbk(`🤔 Casi. Los conectores unen ideas (y, porque, pero, también, entonces, luego, por último, además). Hay ${cs.length} en el texto. ¡Prueba otra vez!`,"bad")}
+/* ============ FIN DE PARTIDA ============ */
+function fin(){clearInterval(tid);const g=S.g,d=store.get(),bonus=S.perf?100:0,sc=S.sc+bonus,b=d.best[g.id]||{s:0,t:0};
+(d.used[g.id]=d.used[g.id]||[]).push(...S.idx);
+const nS=sc>b.s,nT=S.ok>=3&&(!b.t||S.sec<b.t);
+d.best[g.id]={s:Math.max(sc,b.s),t:nT?S.sec:b.t};store.set(d);
+const st=sc>=500?3:sc>=350?2:1,left=20-d.used[g.id].length;
+const msg=st==3?"¡Eres un campeón! 🏆":st==2?"¡Muy bien! Estás muy cerca de las 3 estrellas 💪":"¡Buen intento! Cada partida te hace más fuerte 🌱";
+if(nS||nT)burst(18);
+app.innerHTML=`<div class=box style="text-align:center"><div class=stars>${"⭐".repeat(st)}${"☆".repeat(3-st)}</div><h2>${msg}</h2>
+<p>Ejercicios logrados: <b>${S.ok}/5</b> · Puntos: <b>${S.sc}</b>${bonus?" + 100 de bono por partida perfecta 🎁":""}<br>Puntaje total: <b>${sc}</b> · Tiempo: <b>${fmt(S.sec)}</b></p>
+<div class=rec>${nS?"🏆 ¡Nuevo récord de puntaje!":"🏆 Récord de puntaje: "+b.s}<br>${nT?"⏱️ ¡Nuevo mejor tiempo!":"⏱️ Mejor tiempo: "+(b.t?fmt(b.t):"—")}</div>
+<p>${nS||nT?"¡Increíble! ¿Podrás superarte otra vez?":"¡Juega otra vez para superar tus récords!"} ${left?"Te quedan "+left+" ejercicios nuevos.":"¡Completaste los 20 ejercicios! La próxima partida empieza un nuevo ciclo."}</p>
+<button class="btn go" onclick="ini(${S.i})">🔁 Jugar otra vez</button><button class=btn onclick="menu()">🏠 Menú</button></div>`}
+menu();
+</script></body></html>
